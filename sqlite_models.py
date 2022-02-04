@@ -17,9 +17,17 @@ class TodosSQLite:
         try:
             self.conn = create_connection()
             self.cur = self.conn.cursor()
-            self.cur.execute("SELECT * FROM todos")
-            self.todos_sqlite = self.cur.fetchall()
-            self.conn.close()
+            try:
+                self.cur.execute("SELECT * FROM todos")
+                self.todos_sqlite = self.cur.fetchall()
+                self.conn.close()
+            except Error:
+                self.cur.execute('''CREATE TABLE IF NOT EXISTS todos (
+                    id integer PRIMARY KEY, 
+                    title VARCHAR(250) NOT NULL, 
+                    description text NOT NULL,
+                    done Boolean);''')
+                self.todos_sqlite = []
         except FileNotFoundError:
             self.todos_sqlite = []
 
@@ -37,8 +45,8 @@ class TodosSQLite:
         self.cur.execute(f"SELECT * FROM todos WHERE id={id}")
         self.row = self.cur.fetchone()
         self.conn.close()
-        dict = {"id": self.row[0], "title": self.row[1], "description": self.row[2], "done": self.row[3]}
-        return dict
+        self.dict = {"id": self.row[0], "title": self.row[1], "description": self.row[2], "done": self.row[3]}
+        return self.dict
     
     def create(self, data):
         data.pop('csrf_token')
@@ -72,8 +80,6 @@ class TodosSQLite:
             print(e)
 
 todos_sql = TodosSQLite()
-
-
 
 
 """

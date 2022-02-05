@@ -4,7 +4,10 @@ from sqlite3 import Error
 class TodosSQLite:
     def __init__(self):
         self.conn = None
-        return self.conn
+        try:
+            self.conn = sqlite3.connect("database.db")
+        except Error as e:
+            print(e) 
 
     def create_connection(self):
         try:
@@ -58,4 +61,3 @@ class TodosSQLite:
                 print(e)
 
 todos_sql = TodosSQLite()
-

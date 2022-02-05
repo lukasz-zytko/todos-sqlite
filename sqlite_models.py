@@ -9,7 +9,7 @@ class TodosSQLite:
     def create_connection(self):
         try:
             self.conn = sqlite3.connect("database.db")
-            print("POłącznie nawiązane")
+            print("Połącznie nawiązane")
             return self.conn
         except Error as e:
             print(e)    
@@ -59,3 +59,4 @@ class TodosSQLite:
                 print(e)
 
 todos_sql = TodosSQLite()
+

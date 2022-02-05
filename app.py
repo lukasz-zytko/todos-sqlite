@@ -6,10 +6,13 @@ from sqlite_models import todos_sql
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "nininini"
 
+
+
 @app.route("/todos/", methods=["GET", "POST"])
 def todos_list():
     form = TodoForm()
     error = ""
+    todos_sql.create_connection()
     if request.method == "POST":
         if form.validate_on_submit():
             todos_sql.create(form.data)
@@ -20,6 +23,7 @@ def todos_list():
 
 @app.route("/todos/<int:todo_id>/", methods=["GET", "POST"])
 def todo_details(todo_id):
+    todos_sql.create_connection()
     todoql = todos_sql.get(todo_id)
     form = TodoForm(data=todoql)
     if request.method == "POST":
